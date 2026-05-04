@@ -24,6 +24,7 @@ return [
         'http://127.0.0.1:5173',
         'https://purplish-bleach-ecosystem.ngrok-free.dev',
         'https://sfitness-backend-production.up.railway.app',
+        'https://sfitness-frontend.vercel.app',
     ],
 
     'allowed_origins_patterns' => [
