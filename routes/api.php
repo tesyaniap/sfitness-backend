@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\AttendanceController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ClassController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DebtController;
 use App\Http\Controllers\Api\DistributorController;
+use App\Http\Controllers\Api\MemberPackageController;
+use App\Http\Controllers\Api\MembershipController;
 use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\PurchaseController;
@@ -57,11 +60,34 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transactions',               [TransactionController::class, 'store']);
     Route::get('/transactions/{transaction}',  [TransactionController::class, 'show']);
 
+    // Memberships (member lihat milik sendiri)
+    Route::get('/my-memberships',          [MembershipController::class, 'myMemberships']);
+    Route::get('/memberships/check-active', [MembershipController::class, 'checkActive']);
+
+    // Member packages (public read)
+    Route::get('/member-packages', [MemberPackageController::class, 'index']);
+
     // Dashboard
     Route::get('/dashboard/member', [DashboardController::class, 'member']);
 
     // ── Admin routes ──────────────────────────────────────────────────────────
     Route::middleware('role:admin,super_admin')->group(function () {
+
+        // Member Packages
+        Route::post('/member-packages',                    [MemberPackageController::class, 'store']);
+        Route::put('/member-packages/{memberPackage}',     [MemberPackageController::class, 'update']);
+        Route::delete('/member-packages/{memberPackage}',  [MemberPackageController::class, 'destroy']);
+
+        // Memberships
+        Route::get('/memberships',              [MembershipController::class, 'index']);
+        Route::post('/memberships',             [MembershipController::class, 'store']);
+        Route::get('/memberships/{membership}', [MembershipController::class, 'show']);
+
+        // Attendance
+        Route::get('/attendances',                [AttendanceController::class, 'index']);
+        Route::post('/attendances',               [AttendanceController::class, 'store']);
+        Route::get('/attendances/{attendance}',   [AttendanceController::class, 'show']);
+        Route::get('/reports/daily',              [AttendanceController::class, 'dailyReport']);
 
         // Dashboard
         Route::get('/dashboard/admin', [DashboardController::class, 'admin']);

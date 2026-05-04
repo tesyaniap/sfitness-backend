@@ -13,7 +13,9 @@ class UserController extends Controller
         $users = User::query()
             ->when($request->role, fn($q) => $q->where('role', $request->role))
             ->when($request->search, fn($q) => $q->where('name', 'like', "%{$request->search}%")
-                ->orWhere('email', 'like', "%{$request->search}%"))
+                ->orWhere('email', 'like', "%{$request->search}%")
+                ->orWhere('member_number', 'like', "%{$request->search}%")
+                ->orWhere('whatsapp', 'like', "%{$request->search}%"))
             ->latest()
             ->paginate(15);
 
@@ -28,13 +30,18 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
-            'name'      => 'sometimes|string|max:255',
-            'phone'     => 'nullable|string|max:20',
-            'role'      => 'sometimes|in:super_admin,admin,member',
-            'is_active' => 'sometimes|boolean',
+            'name'        => 'sometimes|string|max:255',
+            'phone'       => 'nullable|string|max:20',
+            'whatsapp'    => 'nullable|string|max:20',
+            'birth_place' => 'nullable|string|max:100',
+            'birth_date'  => 'nullable|date',
+            'religion'    => 'nullable|string|max:50',
+            'occupation'  => 'nullable|string|max:100',
+            'address'     => 'nullable|string',
+            'role'        => 'sometimes|in:super_admin,admin,member',
+            'is_active'   => 'sometimes|boolean',
         ]);
 
-        // Hanya super_admin yang bisa ubah role
         if (isset($data['role']) && !$request->user()->isSuperAdmin()) {
             return response()->json(['message' => 'Forbidden.'], 403);
         }
@@ -52,10 +59,15 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         $data = $request->validate([
-            'name'       => 'sometimes|string|max:255',
-            'phone'      => 'nullable|string|max:20',
-            'birth_date' => 'nullable|date',
-            'avatar'     => 'nullable|string',
+            'name'        => 'sometimes|string|max:255',
+            'phone'       => 'nullable|string|max:20',
+            'whatsapp'    => 'nullable|string|max:20',
+            'birth_date'  => 'nullable|date',
+            'birth_place' => 'nullable|string|max:100',
+            'religion'    => 'nullable|string|max:50',
+            'occupation'  => 'nullable|string|max:100',
+            'address'     => 'nullable|string',
+            'avatar'      => 'nullable|string',
         ]);
 
         $request->user()->update($data);

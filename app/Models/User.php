@@ -12,8 +12,9 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'name', 'email', 'phone', 'password',
-        'role', 'avatar', 'birth_date', 'is_active',
+        'name', 'email', 'phone', 'whatsapp', 'password',
+        'role', 'avatar', 'birth_date', 'birth_place',
+        'religion', 'occupation', 'address', 'member_number', 'is_active',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -29,7 +30,9 @@ class User extends Authenticatable
     public function isAdmin(): bool { return in_array($this->role, ['super_admin', 'admin']); }
     public function isMember(): bool { return $this->role === 'member'; }
 
-    public function bookings() { return $this->hasMany(Booking::class); }
-    public function transactions() { return $this->hasMany(Transaction::class); }
+    public function bookings()        { return $this->hasMany(Booking::class); }
+    public function transactions()    { return $this->hasMany(Transaction::class); }
+    public function memberships()     { return $this->hasMany(Membership::class); }
+    public function attendances()     { return $this->hasMany(AttendanceMember::class); }
     public function instructedClasses() { return $this->hasMany(FitnessClass::class, 'instructor_id'); }
 }

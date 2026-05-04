@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
             'role'     => 'member',
         ]);
 
+        $this->call(MemberPackageSeeder::class);
+
         $classes = [
             ['name' => 'Zumba Morning', 'type' => 'zumba', 'duration_minutes' => 60, 'quota' => 20, 'price' => 50000],
             ['name' => 'Yoga Relaxation', 'type' => 'yoga', 'duration_minutes' => 75, 'quota' => 15, 'price' => 60000],
