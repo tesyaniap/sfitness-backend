@@ -23,11 +23,12 @@ return [
         'http://localhost:5173',
         'http://127.0.0.1:5173',
         'https://purplish-bleach-ecosystem.ngrok-free.dev',
-        '/\.trycloudflare\.com$/',
     ],
 
     'allowed_origins_patterns' => [
         '#^https://[\w-]+\.trycloudflare\.com$#',
+        '#^https://[\w-]+\.ngrok-free\.app$#',
+        '#^https://[\w-]+\.ngrok\.io$#',
     ],
 
     'allowed_headers' => ['*'],
